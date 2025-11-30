@@ -140,7 +140,8 @@ $total_visitantes = $dados_visitantes['total_visitantes'] ?? 0;
     <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">
-                <i class="fas fa-parking me-2"></i> UNINASSAU Estacionamento
+                <img src="https://images.seeklogo.com/logo-png/47/2/uninassau-logo-png_seeklogo-475645.png" width="80" alt="Logo">
+                <span class="ms-2 fw-bold text-dark"><h4>Estacionamento UNINASSAU</h4></span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
