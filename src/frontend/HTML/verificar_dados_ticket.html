@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verificar Dados do Ticket - UNINASSAU</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .card-verificar {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .card-header-verificar {
+            background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+            color: #333;
+            padding: 30px;
+            text-align: center;
+            border-radius: 15px 15px 0 0;
+        }
+
+        .card-header-verificar h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .card-body-verificar {
+            padding: 40px;
+        }
+
+        .formulario-verificar {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .form-group-verificar {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group-verificar label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group-verificar input {
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        .btn-verificar {
+            padding: 12px;
+            background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+            color: #333;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .btn-verificar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .resultado {
+            display: none;
+            margin-top: 30px;
+            padding: 20px;
+            background: #f0f4ff;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .resultado.show {
+            display: block;
+        }
+
+        .resultado-item {
+            margin: 15px 0;
+            padding: 10px;
+            background: white;
+            border-radius: 6px;
+            border-left: 3px solid #667eea;
+        }
+
+        .resultado-item strong {
+            color: #667eea;
+        }
+
+        .status-badge {
+            display: inline-block;
+            background: #d4edda;
+            color: #155724;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .alerta {
+            border-radius: 8px;
+            border: none;
+            padding: 15px;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        .alerta.show {
+            display: block;
+        }
+
+        .alerta-erro {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alerta-sucesso {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .tabela-resultados {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .tabela-resultados td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .tabela-resultados td:first-child {
+            font-weight: 600;
+            color: #667eea;
+            width: 35%;
+        }
+
+        .info-banco {
+            background: #e8f4f8;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border-left: 4px solid #17a2b8;
+        }
+
+        .info-banco strong {
+            color: #17a2b8;
+        }
+
+        .links-rodape {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .links-rodape a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            transition: all 0.3s;
+        }
+
+        .links-rodape a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="card-verificar">
+        <div class="card-header-verificar">
+            <h1>
+                <i class="fas fa-check-circle"></i> Verificar Dados do Ticket
+            </h1>
+            <p style="margin-top: 10px;">Consulte os dados armazenados no banco de dados</p>
+        </div>
+
+        <div class="card-body-verificar">
+            <!-- Alertas -->
+            <div id="mensagemErro" class="alerta alerta-erro">
+                <i class="fas fa-exclamation-circle"></i>
+                <span id="textoErro"></span>
+            </div>
+
+            <div id="mensagemSucesso" class="alerta alerta-sucesso">
+                <i class="fas fa-check-circle"></i>
+                Dados encontrados no banco de dados!
+            </div>
+
+            <!-- Formulário -->
+            <div class="formulario-verificar">
+                <p><strong>Opção 1: Verificar por Código de Ticket</strong></p>
+                
+                <div class="form-group-verificar">
+                    <label for="codigoTicket">Código (6 dígitos)</label>
+                    <input 
+                        type="text" 
+                        id="codigoTicket" 
+                        placeholder="Ex: 123456"
+                        maxlength="6"
+                    >
+                </div>
+
+                <button type="button" class="btn-verificar" onclick="verificarPorCodigo()">
+                    <i class="fas fa-search"></i> Buscar por Código
+                </button>
+
+                <hr style="margin: 20px 0;">
+
+                <p><strong>Opção 2: Verificar por CPF</strong></p>
+                
+                <div class="form-group-verificar">
+                    <label for="cpfBusca">CPF</label>
+                    <input 
+                        type="text" 
+                        id="cpfBusca" 
+                        placeholder="Ex: 123.456.789-00"
+                        maxlength="14"
+                    >
+                </div>
+
+                <button type="button" class="btn-verificar" onclick="verificarPorCpf()">
+                    <i class="fas fa-id-card"></i> Buscar por CPF
+                </button>
+            </div>
+
+            <!-- Resultado -->
+            <div id="resultado" class="resultado">
+                <h4 style="margin-bottom: 15px;">
+                    <i class="fas fa-database" style="color: #17a2b8;"></i> 
+                    Dados Encontrados no Banco
+                </h4>
+
+                <table class="tabela-resultados">
+                    <tr>
+                        <td><i class="fas fa-ticket-alt"></i> Código Acesso:</td>
+                        <td id="resultCodigoAcesso">-</td>
+                    </tr>
+                    <tr>
+                        <td><i class="fas fa-user"></i> Nome:</td>
+                        <td id="resultNome">-</td>
+                    </tr>
+                    <tr>
+                        <td><i class="fas fa-id-card"></i> CPF:</td>
+                        <td id="resultCpf">-</td>
+                    </tr>
+                    <tr>
+                        <td><i class="fas fa-calendar"></i> Data Entrada:</td>
+                        <td id="resultDataEntrada">-</td>
+                    </tr>
+                    <tr>
+                        <td><i class="fas fa-money-bill"></i> Status:</td>
+                        <td id="resultStatus">-</td>
+                    </tr>
+                </table>
+
+                <div class="info-banco">
+                    <strong><i class="fas fa-shield-alt"></i> Segurança</strong><br>
+                    Os dados estão armazenados com segurança no banco de dados 
+                    <code>estacionamento_db</code> na tabela <code>tickets</code>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Links -->
+    <div class="links-rodape">
+        <a href="gerar_ticket_visitante.html">
+            <i class="fas fa-plus-circle"></i> Gerar Novo Ticket
+        </a>
+        <a href="visitante.html">
+            <i class="fas fa-credit-card"></i> Ir para Pagamento
+        </a>
+        <a href="../../index.html">
+            <i class="fas fa-home"></i> Voltar ao Início
+        </a>
+    </div>
+
+    <script>
+        const API_BASE = '../PHP/api_visitante.php';
+
+        // Máscara CPF
+        document.getElementById('cpfBusca').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 11) value = value.slice(0, 11);
+            
+            if (value.length > 8) {
+                value = value.slice(0, 3) + '.' + value.slice(3, 6) + '.' + value.slice(6, 9) + '-' + value.slice(9);
+            } else if (value.length > 6) {
+                value = value.slice(0, 3) + '.' + value.slice(3, 6) + '.' + value.slice(6);
+            } else if (value.length > 3) {
+                value = value.slice(0, 3) + '.' + value.slice(3);
+            }
+            
+            e.target.value = value;
+        });
+
+        async function verificarPorCodigo() {
+            const codigo = document.getElementById('codigoTicket').value.trim();
+
+            if (!codigo) {
+                mostrarErro('Digite o código (6 dígitos)');
+                return;
+            }
+
+            if (codigo.length !== 6) {
+                mostrarErro('Código deve ter exatamente 6 dígitos');
+                return;
+            }
+
+            await consultar(codigo);
+        }
+
+        async function verificarPorCpf() {
+            const cpf = document.getElementById('cpfBusca').value.trim();
+
+            if (!cpf) {
+                mostrarErro('Digite o CPF');
+                return;
+            }
+
+            if (cpf.length !== 14) {
+                mostrarErro('CPF deve estar no formato 000.000.000-00');
+                return;
+            }
+
+            // Buscar todos os tickets deste CPF
+            await buscarPorCpf(cpf);
+        }
+
+        async function consultar(codigo) {
+            try {
+                const response = await fetch(`${API_BASE}?acao=consultar&codigo=${codigo}`);
+                const data = await response.json();
+
+                if (response.ok && data.sucesso) {
+                    exibirResultado(data);
+                } else {
+                    mostrarErro('Código não encontrado no banco de dados');
+                }
+            } catch (erro) {
+                mostrarErro('Erro ao conectar: ' + erro.message);
+            }
+        }
+
+        async function buscarPorCpf(cpf) {
+            try {
+                // Fazer busca via SQL (você pode adicionar um endpoint específico depois)
+                alert('Busca por CPF:\n\n' + 
+                    'Para verificar todos os tickets de um CPF, acesse phpMyAdmin e execute:\n\n' +
+                    `SELECT * FROM tickets WHERE cpf = '${cpf}'`);
+            } catch (erro) {
+                mostrarErro('Erro: ' + erro.message);
+            }
+        }
+
+        function exibirResultado(data) {
+            document.getElementById('resultCodigoAcesso').textContent = data.codigo_acesso || '-';
+            
+            // Formatar data
+            const dataEntrada = new Date(data.entrada);
+            const dataFormatada = dataEntrada.toLocaleDateString('pt-BR');
+            const horaFormatada = dataEntrada.toLocaleTimeString('pt-BR');
+            document.getElementById('resultDataEntrada').textContent = `${dataFormatada} ${horaFormatada}`;
+            
+            document.getElementById('resultStatus').textContent = 
+                data.status === 'PAGO' ? '✅ PAGO' : '⏳ PENDENTE';
+            
+            // CPF e Nome (buscar do banco)
+            // Nota: A resposta do endpoint consultar não retorna CPF e Nome
+            // Você pode adicionar isso depois fazendo uma query específica
+            document.getElementById('resultCpf').textContent = 'Disponível no banco';
+            document.getElementById('resultNome').textContent = 'Disponível no banco';
+            
+            document.getElementById('resultado').classList.add('show');
+            document.getElementById('mensagemSucesso').classList.add('show');
+        }
+
+        function mostrarErro(mensagem) {
+            const alerta = document.getElementById('mensagemErro');
+            document.getElementById('textoErro').textContent = mensagem;
+            alerta.classList.add('show');
+            
+            setTimeout(() => {
+                alerta.classList.remove('show');
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

@@ -1,14 +1,23 @@
 <?php
-// =============================================
-// LOGOUT - Encerrar Sessão
-// =============================================
+/**
+ * =====================================================
+ * LOGOUT - SISTEMA DE ESTACIONAMENTO
+ * =====================================================
+ * 
+ * Arquivo: logout.php
+ * Descrição: Destrói sessão e redireciona para login
+ * 
+ * Data: 30/11/2025
+ * Versão: 1.0
+ */
 
-session_start();
+require_once 'conexao_unificada.php';
 
-// Destruir a sessão
-session_destroy();
+// Fazer logout (destrói sessão com log)
+fazer_logout();
 
-// Redirecionar para página de login
-header("Location: index.html");
+// Redirecionar para login
+header("Location: ../HTML/login.php");
 exit();
+
 ?>

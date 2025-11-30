@@ -11,13 +11,18 @@
 </head>
 <body class="bg-light">
 
-    <nav class="navbar navbar-light">
+    <nav class="navbar navbar-light bg-warning">
         <div class="container-fluid">
             <a class="navbar-brand" href="index.html">
                 <img src="https://images.seeklogo.com/logo-png/47/2/uninassau-logo-png_seeklogo-475645.png" width="80" alt="Logo">
-                <span class="ms-2">Estacionamento UNINASSAU</span>
+                <span class="ms-2 fw-bold text-dark"><h4>Estacionamento</h4></span>
             </a>
-            <a href="index.html" class="btn btn-outline-secondary">Voltar ao Início</a>
+            <div>
+                <a href="gerar_ticket_visitante.html" class="btn btn-success me-2">
+                    <i class="fas fa-plus-circle"></i> Gerar Ticket
+                </a>
+                <a href="index.html" class="btn btn-outline-secondary">Voltar ao Início</a>
+            </div>
         </div>
     </nav>
 
@@ -27,7 +32,7 @@
                 
                 <!-- Seção de Entrada de Ticket -->
                 <div class="card shadow-sm mb-4">
-                    <div class="card-header bg-primary text-white">
+                    <div class="card-header bg-warning text-dark">
                         <h5 class="mb-0"><i class="fas fa-ticket-alt me-2"></i> Consultar Ticket de Estacionamento</h5>
                     </div>
                     <div class="card-body">
@@ -156,129 +161,6 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <script>
-        // Simulação de dados de tickets
-        const ticketsDatabase = {
-            'TICK-2025-00001': {
-                dataEntrada: '23/11/2025',
-                horaEntrada: '14:30',
-                horaAtual: '17:15', // Simula hora atual
-                valorHora: 5.00
-            },
-            'TICK-2025-00002': {
-                dataEntrada: '23/11/2025',
-                horaEntrada: '12:00',
-                horaAtual: '17:15',
-                valorHora: 5.00
-            },
-            'TICK-2025-00003': {
-                dataEntrada: '23/11/2025',
-                horaEntrada: '15:45',
-                horaAtual: '17:15',
-                valorHora: 5.00
-            }
-        };
-
-        // Função para calcular tempo de permanência
-        function calcularTempoEstacionamento(horaEntrada, horaAtual) {
-            const [entHoras, entMinutos] = horaEntrada.split(':').map(Number);
-            const [atualHoras, atualMinutos] = horaAtual.split(':').map(Number);
-            
-            let minutos = atualMinutos - entMinutos;
-            let horas = atualHoras - entHoras;
-            
-            if (minutos < 0) {
-                minutos += 60;
-                horas -= 1;
-            }
-            
-            // Arredondar para a hora cheia se houver minutos
-            if (minutos > 0) {
-                horas += 1;
-            }
-            
-            return { horas, minutos: 0 };
-        }
-
-        // Função para calcular valor total
-        function calcularValorTotal(horas, valorHora) {
-            return (horas * valorHora).toFixed(2);
-        }
-
-        // Evento do botão Consultar
-        document.getElementById('btnConsultarTicket').addEventListener('click', function() {
-            const codigo = document.getElementById('codigoTicket').value.trim().toUpperCase();
-            const ticketInfoDiv = document.getElementById('ticketInfo');
-            const erroDiv = document.getElementById('mensagemErro');
-            const sucessoDiv = document.getElementById('mensagemSucesso');
-            
-            // Limpar mensagens anteriores
-            erroDiv.classList.remove('show');
-            sucessoDiv.classList.remove('show');
-            
-            if (ticketsDatabase[codigo]) {
-                const ticket = ticketsDatabase[codigo];
-                const tempo = calcularTempoEstacionamento(ticket.horaEntrada, ticket.horaAtual);
-                const valor = calcularValorTotal(tempo.horas, ticket.valorHora);
-                
-                // Atualizar campos de exibição
-                document.getElementById('displayCodigoTicket').textContent = codigo;
-                document.getElementById('displayDataEntrada').textContent = ticket.dataEntrada;
-                document.getElementById('displayHoraEntrada').textContent = ticket.horaEntrada;
-                document.getElementById('displayTempoEstacionado').textContent = 
-                    `${tempo.horas}h ${tempo.minutos}min`;
-                document.getElementById('displayValorTotal').textContent = `R$ ${valor}`;
-                document.getElementById('displayDetalheCálculo').textContent = 
-                    `${tempo.horas}h ${tempo.minutos}min × R$ ${ticket.valorHora.toFixed(2)}/h = R$ ${valor}`;
-                
-                // Mostrar informações do ticket
-                ticketInfoDiv.style.display = 'block';
-                window.scrollTo({ top: ticketInfoDiv.offsetTop - 100, behavior: 'smooth' });
-            } else {
-                document.getElementById('textoErro').textContent = 
-                    'O código "' + codigo + '" não foi encontrado em nosso sistema. Verifique e tente novamente.';
-                erroDiv.classList.add('show');
-                ticketInfoDiv.style.display = 'none';
-            }
-        });
-
-        // Permitir buscar com Enter
-        document.getElementById('codigoTicket').addEventListener('keypress', function(event) {
-            if (event.key === 'Enter') {
-                document.getElementById('btnConsultarTicket').click();
-            }
-        });
-
-        // Evento do botão Pagar
-        document.getElementById('btnRealizarPagamento').addEventListener('click', function() {
-            const sucessoDiv = document.getElementById('mensagemSucesso');
-            const ticketInfoDiv = document.getElementById('ticketInfo');
-            
-            // Desabilitar botão durante processamento
-            this.disabled = true;
-            this.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Processando...';
-            
-            // Simular processamento
-            setTimeout(() => {
-                sucessoDiv.classList.add('show');
-                this.disabled = false;
-                this.innerHTML = '<i class="fas fa-credit-card me-2"></i> Realizar Pagamento';
-                
-                // Scroll para mensagem de sucesso
-                window.scrollTo({ top: ticketInfoDiv.offsetTop + 500, behavior: 'smooth' });
-            }, 2000);
-        });
-
-        // Evento do botão Novo Ticket
-        document.getElementById('btnNovoTicket').addEventListener('click', function() {
-            document.getElementById('codigoTicket').value = '';
-            document.getElementById('ticketInfo').style.display = 'none';
-            document.getElementById('mensagemErro').classList.remove('show');
-            document.getElementById('mensagemSucesso').classList.remove('show');
-            document.getElementById('codigoTicket').focus();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-    </script>
+    <script src="js/visitante_api.js"></script>
 </body>
 </html>

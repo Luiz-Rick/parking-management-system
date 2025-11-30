@@ -1,55 +1,87 @@
 <?php
-// =============================================
-// LOGIN FUNCIONÁRIO - PHP
-// Sistema de Estacionamento UNINASSAU
-// =============================================
+/**
+ * =====================================================
+ * LOGIN FUNCIONÁRIO
+ * =====================================================
+ * 
+ * Arquivo: login_funcionario.php
+ * Descrição: Autenticação para funcionários
+ * 
+ * Data: 30/11/2025
+ */
 
-session_start();
-
-// Incluir conexão com banco de dados
-require_once('../PHP/conexao2.php');
+// Usar conexão unificada
+require_once '../PHP/conexao_unificada.php';
 
 $erro = '';
 
 // Processar formulário de login
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email = $mysqli->real_escape_string($_POST['email']);
-    $senha = $_POST['senha'];
-
-    // Buscar usuário no banco
-    $sql = "SELECT * FROM usuarios WHERE email = '$email' AND tipo = 'FUNCIONARIO' LIMIT 1";
-    $resultado = $mysqli->query($sql);
-
-    if ($resultado && $resultado->num_rows === 1) {
-        $usuario = $resultado->fetch_assoc();
-
-        // Verificar se está ativo
-        if ($usuario['status'] == 0) {
-            $erro = "Sua conta está desativada. Contate o administrador.";
-        } 
-        // Verificar senha com hash
-        elseif (password_verify($senha, $usuario['senha'])) {
-            // Login bem-sucedido
-            $_SESSION['id'] = $usuario['id'];
-            $_SESSION['nome'] = $usuario['nome'];
-            $_SESSION['email'] = $usuario['email'];
-            $_SESSION['tipo'] = $usuario['tipo'];
-
-            // Registrar log de acesso
-            $log_sql = "INSERT INTO logs_sistema (usuario_id, acao, data_acao) 
-                       VALUES ({$usuario['id']}, 'LOGIN', NOW())";
-            $mysqli->query($log_sql);
-
-            // Redirecionar para dashboard
-            header("Location: dashboard_func.php");
-            exit();
-        } else {
-            $erro = "Senha incorreta. Tente novamente.";
-        }
+    
+    if (!isset($_POST['email']) || empty($_POST['email'])) {
+        $erro = "Email não informado!";
+    } else if (!isset($_POST['senha']) || empty($_POST['senha'])) {
+        $erro = "Senha não informada!";
     } else {
-        $erro = "Usuário não encontrado ou não é funcionário.";
+        
+        $email = trim($_POST['email']);
+        $senha = $_POST['senha'];
+
+        // =====================================================
+        // USAR PREPARED STATEMENT PARA SEGURANÇA
+        // =====================================================
+        
+        $query = "SELECT id, nome, email, senha, tipo, saldo FROM usuarios 
+                  WHERE email = ? AND (tipo = 'FUNCIONARIO' OR tipo = 'OPERADOR')";
+        $stmt = $mysqli->prepare($query);
+        
+        if (!$stmt) {
+            $erro = "Erro ao preparar a consulta: " . $mysqli->error;
+        } else {
+            
+            $stmt->bind_param('s', $email);
+            $stmt->execute();
+            $resultado = $stmt->get_result();
+
+            if ($resultado && $resultado->num_rows === 1) {
+                $usuario = $resultado->fetch_assoc();
+
+                // COMPARAÇÃO DE SENHA (compatível com dados existentes em texto puro)
+                if ($senha == $usuario['senha']) {
+                    
+                    // Login bem-sucedido
+                    if (session_status() === PHP_SESSION_NONE) {
+                        session_start();
+                    }
+                    
+                    $_SESSION['id'] = $usuario['id'];
+                    $_SESSION['nome'] = $usuario['nome'];
+                    $_SESSION['email'] = $usuario['email'];
+                    $_SESSION['tipo'] = $usuario['tipo'];
+                    $_SESSION['saldo'] = $usuario['saldo'];
+
+                    // Registrar log de acesso
+                    registrar_log_sistema($usuario['id'], 'LOGIN', json_encode([
+                        'tipo' => $usuario['tipo'],
+                        'email' => $usuario['email']
+                    ]));
+
+                    // Redirecionar para dashboard
+                    header("Location: dashboard_func.php");
+                    exit();
+                } else {
+                    $erro = "Senha incorreta. Tente novamente.";
+                }
+            } else {
+                $erro = "Usuário não encontrado ou não é funcionário.";
+            }
+            
+            $stmt->close();
+        }
     }
 }
+
+
 
 ?>
 

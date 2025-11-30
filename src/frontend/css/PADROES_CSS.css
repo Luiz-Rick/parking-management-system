@@ -1,0 +1,583 @@
+/**
+ * =====================================================
+ * GUIA DE PADRÕES CSS DO PROJETO
+ * =====================================================
+ * 
+ * Este documento lista os padrões CSS e Bootstrap
+ * usados em todo o projeto para manter consistência visual.
+ * 
+ * IMPORTANTE: Sempre use essas classes e estilos ao
+ * criar novos componentes!
+ * 
+ * Data: 30/11/2025
+ * Versão: 1.0
+ */
+
+/* =====================================================
+   CORES DO PROJETO
+   ===================================================== */
+
+:root {
+    --color-primary: #ffbf00;          /* Amarelo (Navbar, Headers) */
+    --color-success: #28a745;          /* Verde */
+    --color-danger: #dc3545;           /* Vermelho */
+    --color-warning: #ffc107;          /* Amarelo (Alertas) */
+    --color-info: #17a2b8;             /* Azul */
+    --color-light: #f8f9fa;            /* Cinza claro */
+    --color-dark: #333;                /* Cinza escuro */
+}
+
+/* =====================================================
+   FONTE DO PROJETO
+   ===================================================== */
+
+/*
+   Fonte Padrão: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif
+   
+   Aplicar em:
+   - body
+   - h1, h2, h3, h4, h5, h6
+   - .navbar-brand
+   - .nav-link
+   - .btn
+   - p, span, div
+*/
+
+body {
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+}
+
+/* =====================================================
+   NAVBAR
+   ===================================================== */
+
+/*
+   Padrão: Sempre usar #ffbf00 (amarelo UNINASSAU)
+   
+   Uso:
+   <nav class="navbar navbar-light">
+       <a class="navbar-brand" href="...">Logo</a>
+   </nav>
+*/
+
+.navbar {
+    background-color: #ffbf00 !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand {
+    font-weight: bold;
+    color: #333 !important;
+}
+
+.nav-link {
+    color: #333 !important;
+}
+
+/* =====================================================
+   CARDS
+   ===================================================== */
+
+/*
+   Padrão: sem border, border-radius 10px
+   
+   Uso:
+   <div class="card shadow-sm">
+       <div class="card-header bg-white border-bottom">
+           <h6>Título</h6>
+       </div>
+       <div class="card-body">
+           Conteúdo
+       </div>
+   </div>
+*/
+
+.card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.card.login-card {
+    width: 100%;
+    max-width: 400px;
+}
+
+.card-header {
+    background-color: #f8f9fa !important;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+/* =====================================================
+   SIDEBAR
+   ===================================================== */
+
+/*
+   Padrão: Para dashboards com menu lateral
+   
+   Uso:
+   <div class="sidebar">
+       <nav class="navbar-nav flex-column">
+           <a class="nav-link active">Item Ativo</a>
+           <a class="nav-link">Item</a>
+       </nav>
+   </div>
+*/
+
+.sidebar {
+    min-height: calc(100vh - 56px);
+}
+
+.sidebar .nav-link {
+    color: #333;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.sidebar .nav-link:hover {
+    background-color: #f8f9fa;
+    color: #0d6efd;
+}
+
+.sidebar .nav-link.active {
+    background-color: #e9ecef;
+    color: #0d6efd;
+    font-weight: bold;
+}
+
+/* =====================================================
+   BOTÕES
+   ===================================================== */
+
+/*
+   Padrão: Usar classes Bootstrap padrão
+   
+   Uso:
+   <button class="btn btn-primary">Enviar</button>
+   <button class="btn btn-success">Salvar</button>
+   <button class="btn btn-outline-secondary">Cancelar</button>
+*/
+
+.btn {
+    border-radius: 8px;
+    font-weight: 600;
+    padding: 0.6rem 1.2rem;
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* =====================================================
+   ALERTAS
+   ===================================================== */
+
+/*
+   Padrão: Usar classes Bootstrap
+   
+   Uso:
+   <div class="alert alert-success">Sucesso!</div>
+   <div class="alert alert-danger">Erro!</div>
+   <div class="alert alert-warning">Aviso!</div>
+   <div class="alert alert-info">Informação!</div>
+*/
+
+.alert {
+    border-radius: 8px;
+    border: none;
+    border-left: 4px solid;
+    animation: slideDown 0.3s ease-in;
+}
+
+.alert-success {
+    border-left-color: #28a745;
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.alert-danger {
+    border-left-color: #dc3545;
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.alert-warning {
+    border-left-color: #ffc107;
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.alert-info {
+    border-left-color: #17a2b8;
+    background-color: #d1ecf1;
+    color: #0c5460;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* =====================================================
+   FOOTER
+   ===================================================== */
+
+/*
+   Padrão: Sempre usar os estilos padrão
+   
+   Uso:
+   <footer class="bg-light text-center text-lg-start mt-5">
+       <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
+           © 2025 Estacionamento UNINASSAU S.A
+       </div>
+   </footer>
+*/
+
+footer {
+    background-color: #f8f9fa;
+    margin-top: 5rem;
+    border-top: 1px solid #e9ecef;
+}
+
+footer .text-center.p-3 {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* =====================================================
+   UTILIDADES DE DISPLAY
+   ===================================================== */
+
+.hidden {
+    display: none !important;
+}
+
+.hidden.show {
+    display: block !important;
+}
+
+/* =====================================================
+   UTILIDADES DE ÍCONES
+   ===================================================== */
+
+/*
+   Padrão: Usar Font Awesome 6.4.0
+   
+   Uso:
+   <i class="fas fa-home icon-medium"></i>
+*/
+
+.icon-small {
+    font-size: 1.2rem;
+}
+
+.icon-medium {
+    font-size: 1.5rem;
+}
+
+.icon-large {
+    font-size: 2rem;
+}
+
+.icon-xlarge {
+    font-size: 3rem;
+}
+
+/* =====================================================
+   UTILIDADES DE COR
+   ===================================================== */
+
+.text-golden {
+    color: #FFD700;
+}
+
+.text-lime {
+    color: #4CFF00;
+}
+
+.text-success-dark {
+    color: #28a745;
+}
+
+/* =====================================================
+   UTILIDADES DE ESPAÇAMENTO
+   ===================================================== */
+
+.mt-custom {
+    margin-top: 2rem;
+}
+
+.mb-custom {
+    margin-bottom: 2rem;
+}
+
+/* =====================================================
+   TABELAS
+   ===================================================== */
+
+/*
+   Padrão: Bootstrap table-hover
+   
+   Uso:
+   <table class="table table-hover">
+       <thead>
+           <tr class="text-muted">
+               <th>Coluna 1</th>
+               <th>Coluna 2</th>
+           </tr>
+       </thead>
+       <tbody>
+           <tr>
+               <td>Dado 1</td>
+               <td>Dado 2</td>
+           </tr>
+       </tbody>
+   </table>
+*/
+
+.table {
+    border-collapse: collapse;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.table th {
+    font-weight: 600;
+    color: #666;
+    border-bottom: 2px solid #e9ecef;
+}
+
+/* =====================================================
+   BADGES
+   ===================================================== */
+
+/*
+   Padrão: Bootstrap badges com cores padrão
+   
+   Uso:
+   <span class="badge bg-success">Ativo</span>
+   <span class="badge bg-danger">Inativo</span>
+   <span class="badge bg-warning text-dark">Aviso</span>
+*/
+
+.badge {
+    font-size: 0.8rem;
+    padding: 0.35rem 0.65rem;
+    border-radius: 4px;
+}
+
+/* =====================================================
+   MODAIS
+   ===================================================== */
+
+/*
+   Padrão: Bootstrap 5 modais
+   
+   Uso:
+   <div class="modal fade" id="meuModal" tabindex="-1">
+       <div class="modal-dialog modal-dialog-centered">
+           <div class="modal-content">
+               <div class="modal-header bg-primary text-white">
+                   <h5 class="modal-title">Título</h5>
+               </div>
+               <div class="modal-body">
+                   Conteúdo
+               </div>
+               <div class="modal-footer">
+                   <button class="btn btn-secondary">Cancelar</button>
+                   <button class="btn btn-primary">OK</button>
+               </div>
+           </div>
+       </div>
+   </div>
+*/
+
+.modal-header {
+    background-color: #0d6efd;
+    color: white;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.modal-header.bg-primary {
+    background-color: #0d6efd !important;
+}
+
+/* =====================================================
+   FORMULÁRIOS
+   ===================================================== */
+
+/*
+   Padrão: Bootstrap form classes
+   
+   Uso:
+   <form class="needs-validation">
+       <div class="mb-3">
+           <label for="input" class="form-label">Label</label>
+           <input type="text" class="form-control" id="input">
+       </div>
+   </form>
+*/
+
+.form-label {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.form-control {
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 0.75rem;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #ffbf00;
+    box-shadow: 0 0 0 0.2rem rgba(255, 191, 0, 0.1);
+}
+
+.form-control.is-invalid {
+    border-color: #dc3545;
+}
+
+.form-control.is-valid {
+    border-color: #28a745;
+}
+
+/* =====================================================
+   RESPONSIVIDADE
+   ===================================================== */
+
+/*
+   Padrão: Sempre testar em:
+   - 576px: Extra small devices (mobile)
+   - 768px: Small devices (tablets)
+   - 992px: Medium devices
+   - 1200px: Large devices
+   - 1400px: Extra large devices
+*/
+
+@media (max-width: 768px) {
+    .card.login-card {
+        max-width: 90%;
+    }
+    
+    footer .text-center.p-3 {
+        font-size: 0.9rem;
+    }
+    
+    .sidebar {
+        display: none;
+    }
+    
+    .table {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .navbar-brand {
+        font-size: 1rem;
+    }
+    
+    .card {
+        margin-bottom: 1rem;
+    }
+    
+    .btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+    }
+}
+
+/* =====================================================
+   ANIMAÇÕES
+   ===================================================== */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* =====================================================
+   CLASSES UTILITÁRIAS EXTRAS
+   ===================================================== */
+
+.shadow-sm {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+}
+
+.shadow-md {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12) !important;
+}
+
+.shadow-lg {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15) !important;
+}
+
+.rounded-custom {
+    border-radius: 10px;
+}
+
+.text-truncate-lines {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* =====================================================
+   PWA SUPPORT
+   ===================================================== */
+
+@supports (padding: max(0px)) {
+    body {
+        padding-top: max(0px, env(safe-area-inset-top));
+        padding-left: max(1rem, env(safe-area-inset-left));
+        padding-right: max(1rem, env(safe-area-inset-right));
+    }
+    
+    footer {
+        padding-bottom: max(1rem, env(safe-area-inset-bottom));
+    }
+}

@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerar Ticket - Estacionamento UNINASSAU</title>
+    
+    <!-- Bootstrap 5.3.0 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome 6.4.0 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #ffffff; /* fundo branco padronizado */
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+        }
+
+        .container-principal {
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .card-gerar {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .card-header-gerar {
+            background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+            color: #333;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        .card-header-gerar h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .card-header-gerar i {
+            font-size: 32px;
+        }
+
+        .card-header-gerar p {
+            margin-top: 10px;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .card-body-gerar {
+            padding: 40px 30px;
+        }
+
+        .formulario-gerar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group-gerar {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group-gerar label {
+            font-weight: 600;
+            color: #333;
+            font-size: 15px;
+        }
+
+        .form-group-gerar input {
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group-gerar input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-group-gerar small {
+            color: #999;
+            font-size: 13px;
+        }
+
+        .btn-gerar-ticket {
+            padding: 14px 20px;
+            font-size: 16px;
+            font-weight: 700;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(180deg, #ffc107 0%, #ffb300 100%); /* amarelo */
+            color: #222222; /* texto escuro para contraste */
+            cursor: pointer;
+            transition: all 0.12s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        }
+
+        .btn-gerar-ticket:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        }
+
+        .btn-gerar-ticket:active {
+            transform: translateY(0);
+        }
+
+        .btn-gerar-ticket:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .spinner-gerar {
+            display: none;
+        }
+
+        .btn-gerar-ticket.carregando {
+            opacity: 0.8;
+        }
+
+        .info-box {
+            background: #ffffff; /* caixa branca */
+            border-left: 4px solid rgba(0,0,0,0.06);
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #333333;
+        }
+
+        .info-box i {
+            color: #333333;
+            margin-right: 10px;
+        }
+
+        .alerta {
+            border-radius: 8px;
+            border: none;
+            padding: 15px;
+            margin-bottom: 20px;
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+
+        .alerta.show {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .alerta-erro {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alerta-sucesso {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .ticket-gerado {
+            display: none;
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 10px;
+            border: 2px dashed #667eea;
+        }
+
+        .ticket-gerado.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        .codigo-ticket {
+            font-size: 48px;
+            font-weight: 700;
+            color: #667eea;
+            letter-spacing: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 20px 0;
+        }
+
+        .btn-copiar {
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-copiar:hover {
+            background: #764ba2;
+        }
+
+        .btn-novo {
+            padding: 10px 20px;
+            background: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+            margin-left: 10px;
+        }
+
+        .btn-novo:hover {
+            background: #5a6268;
+        }
+
+        .btn-consultar {
+            padding: 10px 20px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+            margin-left: 10px;
+        }
+
+        .btn-consultar:hover {
+            background: #218838;
+        }
+
+        .header-branding {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+
+        .header-branding img {
+            height: 50px;
+        }
+
+        .header-branding h2 {
+            margin: 0;
+            font-size: 22px;
+            color: #333;
+        }
+
+        @media (max-width: 576px) {
+            .card-body-gerar {
+                padding: 25px 20px;
+            }
+
+            .card-header-gerar {
+                padding: 20px 15px;
+            }
+
+            .card-header-gerar h1 {
+                font-size: 22px;
+            }
+
+            .codigo-ticket {
+                font-size: 36px;
+                letter-spacing: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container-principal">
+        <!-- Navbar padrão (visual consistente com outras páginas) -->
+        <nav class="navbar navbar-light" style="background-color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); border-radius: 6px; padding: .5rem 1rem; margin-bottom: 18px;">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="../../index.html">
+                    <img src="https://images.seeklogo.com/logo-png/47/2/uninassau-logo-png_seeklogo-475645.png" width="80" alt="Logo">
+                    <span class="ms-2 fw-bold text-dark">Estacionamento UNINASSAU</span>
+                </a>
+                <div>
+                    <a href="visitante.html" class="btn btn-outline-secondary me-2">Voltar ao Pagamento</a>
+                    <a href="../../index.html" class="btn btn-outline-secondary">Ir para Início</a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Card Principal -->
+        <div class="card card-gerar">
+            <!-- Header -->
+            <div class="card-header-gerar card-header bg-warning text-dark">
+                <h1>
+                    <i class="fas fa-ticket-alt"></i>
+                    Gerar Ticket
+                </h1>
+                <p>Entre com seus dados para gerar um código de entrada</p>
+            </div>
+
+            <!-- Body -->
+            <div class="card-body-gerar">
+                <!-- Alertas -->
+                <div id="mensagemErro" class="alerta alerta-erro">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span id="textoErro"></span>
+                </div>
+
+                <div id="mensagemSucesso" class="alerta alerta-sucesso">
+                    <i class="fas fa-check-circle"></i>
+                    <span id="textoSucesso"></span>
+                </div>
+
+                <!-- Formulário -->
+                <form id="formularioGerar" class="formulario-gerar" onsubmit="gerarTicket(event)">
+                    <!-- Campo Nome -->
+                    <div class="form-group-gerar">
+                        <label for="nomeVisitante">
+                            <i class="fas fa-user"></i> Nome Completo
+                        </label>
+                        <input 
+                            type="text" 
+                            id="nomeVisitante" 
+                            name="nome" 
+                            placeholder="Ex: João Silva"
+                            required
+                            minlength="3"
+                            maxlength="100"
+                        >
+                        <small>Mínimo 3 caracteres</small>
+                    </div>
+
+                    <!-- Campo CPF -->
+                    <div class="form-group-gerar">
+                        <label for="cpfVisitante">
+                            <i class="fas fa-id-card"></i> CPF
+                        </label>
+                        <input 
+                            type="text" 
+                            id="cpfVisitante" 
+                            name="cpf" 
+                            placeholder="000.000.000-00"
+                            required
+                            maxlength="14"
+                        >
+                        <small>Formato: 000.000.000-00</small>
+                    </div>
+
+                    <!-- Botão Gerar -->
+                    <button type="submit" class="btn-gerar-ticket">
+                        <span class="spinner-gerar" id="spinnerCarregamento">
+                            <i class="fas fa-spinner fa-spin"></i>
+                        </span>
+                        <span id="textoBtn">
+                            <i class="fas fa-plus-circle"></i>
+                            Gerar Ticket
+                        </span>
+                    </button>
+                </form>
+
+                <!-- Caixa de Informações -->
+                <div class="info-box">
+                    <i class="fas fa-info-circle"></i>
+                    <strong>Como funciona:</strong><br>
+                    1. Insira seu CPF e nome<br>
+                    2. Clique em "Gerar Ticket"<br>
+                    3. Copie o código gerado<br>
+                    4. Use-o para pagar depois
+                </div>
+
+                <!-- Ticket Gerado -->
+                <div id="ticketGerado" class="ticket-gerado">
+                    <h3>✅ Ticket Gerado com Sucesso!</h3>
+                    
+                    <!-- Dados Armazenados -->
+                    <div style="background: #e8f4f8; padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #17a2b8;">
+                        <strong style="color: #17a2b8;">📝 Dados Armazenados no Banco:</strong>
+                        <div style="margin-top: 10px; font-size: 13px; color: #333;">
+                            <div style="margin: 5px 0;">
+                                👤 <strong>Nome:</strong> <span id="displayNomeTicket"></span>
+                            </div>
+                            <div style="margin: 5px 0;">
+                                🆔 <strong>CPF:</strong> <span id="displayCpfTicket"></span>
+                            </div>
+                            <div style="margin: 5px 0;">
+                                📅 <strong>Entrada:</strong> <span id="displayDataTicket"></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <p style="color: #666; margin-top: 20px;">Seu Código de Acesso:</p>
+                    <div class="codigo-ticket" id="codigoGerado"></div>
+                    <p style="color: #999; font-size: 13px;">Este código identifica você no sistema. Guarde para pagar ao sair.</p>
+                    
+                    <div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
+                        <button type="button" class="btn-copiar" onclick="copiarCodigo()">
+                            <i class="fas fa-copy"></i> Copiar Código
+                        </button>
+                        <button type="button" class="btn-consultar" onclick="irParaConsulta()">
+                            <i class="fas fa-search"></i> Ir para Pagamento
+                        </button>
+                        <button type="button" class="btn-novo" onclick="novoTicket()">
+                            <i class="fas fa-redo"></i> Gerar Outro
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Links Úteis -->
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="visitante.html" style="color: white; text-decoration: none; margin-right: 20px;">
+                <i class="fas fa-arrow-left"></i> Voltar ao Pagamento
+            </a>
+            <a href="../../index.html" style="color: white; text-decoration: none;">
+                <i class="fas fa-home"></i> Ir para Início
+            </a>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Script de Geração -->
+    <script>
+        // Caminho da API (Verifique se o nome do arquivo PHP está correto)
+        const API_BASE = '../PHP/api_visitante.php';
+
+        // Máscara de CPF
+        document.getElementById('cpfVisitante').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 11) value = value.slice(0, 11);
+            
+            if (value.length > 8) {
+                value = value.slice(0, 3) + '.' + value.slice(3, 6) + '.' + value.slice(6, 9) + '-' + value.slice(9);
+            } else if (value.length > 6) {
+                value = value.slice(0, 3) + '.' + value.slice(3, 6) + '.' + value.slice(6);
+            } else if (value.length > 3) {
+                value = value.slice(0, 3) + '.' + value.slice(3);
+            }
+            e.target.value = value;
+        });
+
+        // Função Principal: Gerar Ticket
+        async function gerarTicket(event) {
+            event.preventDefault();
+
+            const nome = document.getElementById('nomeVisitante').value.trim();
+            const cpf = document.getElementById('cpfVisitante').value.trim();
+
+            // Validações básicas
+            if (!validarCPF(cpf)) {
+                mostrarErro('CPF inválido. Use o formato: 000.000.000-00');
+                return;
+            }
+            if (nome.length < 3) {
+                mostrarErro('Nome deve ter no mínimo 3 caracteres');
+                return;
+            }
+
+            // Ativar loading
+            const btn = document.querySelector('.btn-gerar-ticket');
+            const spinner = document.getElementById('spinnerCarregamento');
+            btn.disabled = true;
+            spinner.style.display = 'inline-block';
+
+            try {
+                const response = await fetch(`${API_BASE}?acao=gerar_visitante`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nome: nome, cpf: cpf })
+                });
+
+                // Aqui pegamos a resposta do PHP
+                const data = await response.json();
+
+                if (response.ok && data.sucesso) {
+                    // === A CORREÇÃO ESTÁ AQUI EMBAIXO ===
+                    
+                    // O PHP mandou os dados dentro de um objeto 'dados'
+                    // Vamos exibir o TICKET (ex: TICK-2025-001) que é o principal
+                    const codigoParaExibir = data.dados.ticket; 
+                    
+                    document.getElementById('codigoGerado').textContent = codigoParaExibir;
+                    
+                    // Preencher os detalhes (buscando dentro de data.dados)
+                    document.getElementById('displayNomeTicket').textContent = data.dados.nome;
+                    document.getElementById('displayCpfTicket').textContent = cpf; // Usamos o CPF do input
+                    document.getElementById('displayDataTicket').textContent = data.dados.entrada;
+                    
+                    // Esconde formulário e mostra o ticket
+                    document.getElementById('formularioGerar').style.display = 'none';
+                    document.getElementById('ticketGerado').classList.add('show');
+                    limparMensagens();
+
+                } else {
+                    mostrarErro(data.erro || data.mensagem || 'Erro desconhecido ao gerar ticket');
+                }
+
+            } catch (erro) {
+                console.error(erro);
+                mostrarErro('Erro de conexão ou resposta inválida do servidor.');
+            } finally {
+                btn.disabled = false;
+                spinner.style.display = 'none';
+            }
+        }
+
+        // Validador simples de CPF
+        function validarCPF(cpf) {
+            const cpfLimpo = cpf.replace(/\D/g, '');
+            if (cpfLimpo.length !== 11) return false;
+            if (/^(\d)\1{10}$/.test(cpfLimpo)) return false;
+            return true;
+        }
+
+        // Funções auxiliares dos botões
+        function copiarCodigo() {
+            const codigo = document.getElementById('codigoGerado').textContent;
+            navigator.clipboard.writeText(codigo).then(() => {
+                alert('Código copiado: ' + codigo);
+            }).catch(() => alert('Erro ao copiar'));
+        }
+
+        function irParaConsulta() {
+            // Ajuste o link conforme o nome do seu arquivo de visitante
+            window.location.href = 'visitante.html'; 
+        }
+
+        function novoTicket() {
+            document.getElementById('formularioGerar').style.display = 'flex';
+            document.getElementById('ticketGerado').classList.remove('show');
+            document.getElementById('nomeVisitante').value = '';
+            document.getElementById('cpfVisitante').value = '';
+            document.getElementById('nomeVisitante').focus();
+            limparMensagens();
+        }
+
+        function mostrarErro(mensagem) {
+            const alerta = document.getElementById('mensagemErro');
+            document.getElementById('textoErro').textContent = mensagem;
+            alerta.classList.add('show');
+            setTimeout(() => alerta.classList.remove('show'), 5000);
+        }
+
+        function limparMensagens() {
+            document.getElementById('mensagemErro').classList.remove('show');
+            document.getElementById('mensagemSucesso').classList.remove('show');
+        }
+    </script>
+</body>
+</html>
