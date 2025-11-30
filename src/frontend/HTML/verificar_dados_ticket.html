@@ -372,7 +372,7 @@
 
         async function buscarPorCpf(cpf) {
             try {
-                // Fazer busca via SQL (você pode adicionar um endpoint específico depois)
+
                 alert('Busca por CPF:\n\n' + 
                     'Para verificar todos os tickets de um CPF, acesse phpMyAdmin e execute:\n\n' +
                     `SELECT * FROM tickets WHERE cpf = '${cpf}'`);
@@ -384,7 +384,7 @@
         function exibirResultado(data) {
             document.getElementById('resultCodigoAcesso').textContent = data.codigo_acesso || '-';
             
-            // Formatar data
+    
             const dataEntrada = new Date(data.entrada);
             const dataFormatada = dataEntrada.toLocaleDateString('pt-BR');
             const horaFormatada = dataEntrada.toLocaleTimeString('pt-BR');
@@ -393,9 +393,7 @@
             document.getElementById('resultStatus').textContent = 
                 data.status === 'PAGO' ? '✅ PAGO' : '⏳ PENDENTE';
             
-            // CPF e Nome (buscar do banco)
-            // Nota: A resposta do endpoint consultar não retorna CPF e Nome
-            // Você pode adicionar isso depois fazendo uma query específica
+        
             document.getElementById('resultCpf').textContent = 'Disponível no banco';
             document.getElementById('resultNome').textContent = 'Disponível no banco';
             

@@ -1,17 +1,14 @@
 <?php
-// admin_tarifas.php
-// Painel simples para parametrizar tarifa por hora (RF-022)
-
 require_once '../PHP/conexao_unificada.php';
 requer_autenticacao('login.php');
 
-// Permitir apenas FUNCIONARIO ou OPERADOR
+
 if (!usuario_tipo('OPERADOR') && !usuario_tipo('FUNCIONARIO')) {
     header('Location: index.html');
     exit;
 }
 
-// Garantir existência da tabela tarifas
+
 $create = "CREATE TABLE IF NOT EXIST    S tarifas (
     id INT AUTO_INCREMENT PRIMARY KEY,
     valor_hora DECIMAL(10,2) NOT NULL DEFAULT 0.00,
@@ -19,13 +16,13 @@ $create = "CREATE TABLE IF NOT EXIST    S tarifas (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
 $mysqli->query($create);
 
-// Se não houver registro, inserir um padrão
+
 $result = $mysqli->query("SELECT id, valor_hora FROM tarifas ORDER BY id LIMIT 1");
 if ($result && $result->num_rows === 0) {
     $mysqli->query("INSERT INTO tarifas (valor_hora) VALUES (5.00)");
 }
 
-// Tratamento do POST
+
 $mensagem = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['valor_hora'])) {
     $valor = str_replace(',', '.', $_POST['valor_hora']);

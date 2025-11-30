@@ -1,14 +1,3 @@
-/**
- * =====================================================
- * SISTEMA DE PAGAMENTO - VISITANTES
- * =====================================================
- * 
- * Arquivo: visitante_api.js
- * Descrição: Lógica de integração com API de tickets
- * Data: 30/11/2025
- * Versão: 1.0
- */
-
 const API_BASE = '../PHP/api_visitante.php';
 
 document.addEventListener('DOMContentLoaded', function() {

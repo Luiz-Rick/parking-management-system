@@ -1,17 +1,12 @@
 <?php
-// processar_recarga.php
-// Processa formulário de recarga (RF-009)
-
 require_once __DIR__ . '/conexao_unificada.php';
 
-// Garantir método POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
     echo 'Método não permitido';
     exit;
 }
 
-// Verifica autenticação
 if (!usuario_autenticado()) {
     header('Location: ../HTML/login.php');
     exit;
@@ -30,7 +25,6 @@ if ($valor <= 0) {
 
 $mysqli->begin_transaction();
 try {
-    // Atualizar saldo do usuário: saldo = saldo + valor
     $update = "UPDATE usuarios SET saldo = COALESCE(saldo, 0) + ? WHERE id = ?";
     $stmt = $mysqli->prepare($update);
     if (!$stmt) throw new Exception('Erro ao preparar update: ' . $mysqli->error);
@@ -38,10 +32,7 @@ try {
     if (!$stmt->execute()) throw new Exception('Erro ao atualizar saldo: ' . $stmt->error);
     $stmt->close();
 
-    // Inserir transação
-    // Estrutura assumida: transacoes(id, usuario_id, tipo, metodo, valor, data)
     $ins = "INSERT INTO transacoes (usuario_id, tipo, metodo, valor, data) VALUES (?, 'CREDITO', ?, ?, NOW())";
-    // Criar tabela se não existir (simples)
     $create_sql = "CREATE TABLE IF NOT EXISTS transacoes (
         id INT AUTO_INCREMENT PRIMARY KEY,
         usuario_id INT NOT NULL,
@@ -60,7 +51,6 @@ try {
 
     $mysqli->commit();
 
-    // Redirecionar com mensagem de sucesso
     $_SESSION['recarga_msg'] = 'Recarga de R$ ' . number_format($valor, 2, ',', '.') . ' efetuada com sucesso.';
     header('Location: ../HTML/portal_estudante.php');
     exit;

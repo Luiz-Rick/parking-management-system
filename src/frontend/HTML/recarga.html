@@ -6,8 +6,8 @@
     <title>Recarga de Saldo - UNINASSAU S.A</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/recarga.css">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/recarga.css">
 </head>
 <body class="bg-light">
 
@@ -17,7 +17,7 @@
                 <img src="https://images.seeklogo.com/logo-png/47/2/uninassau-logo-png_seeklogo-475645.png" width="80" alt="Logo">
                 <span class="ms-2">Estacionamento UNINASSAU</span>
             </a>
-            <a href="portal-usuario.html" class="btn btn-outline-secondary">Voltar ao Portal</a>
+            <a href="portal_estudante.php" class="btn btn-outline-secondary">Voltar ao Portal</a>
         </div>
     </nav>
 
@@ -35,8 +35,6 @@
                         <i class="fas fa-user-circle me-2"></i><strong>Usuário:</strong> Luiz Henrique Da Silva Pereira<br>
                         <strong>Saldo Atual:</strong> <span style="color: #FFD700;">R$ 198,50</span>
                     </div>
-
-                    <!-- Seção de Seleção de Valor -->
                     <div class="mb-4">
                         <h5 class="mb-3"><i class="fas fa-coins me-2"></i> Selecione um Valor</h5>
                         <div class="valor-option" onclick="selecionarValor(this, 25)">
@@ -55,8 +53,6 @@
                             <div class="valor-amount">R$ 200,00</div>
                             <div class="valor-label">Recarga Premium</div>
                         </div>
-                        
-                        <!-- Valor Customizado -->
                         <h6 class="mt-4 mb-3">Ou Digite um Valor Personalizado:</h6>
                         <div class="input-group mb-3">
                             <span class="input-group-text bg-white text-dark">R$</span>
@@ -71,8 +67,6 @@
                                 onchange="atualizarValorCustomizado(this)">
                         </div>
                     </div>
-
-                    <!-- Seção de Método de Pagamento -->
                     <div class="mb-4">
                         <h5 class="mb-3"><i class="fas fa-credit-card me-2"></i> Selecione o Método de Pagamento</h5>
                         
@@ -94,8 +88,6 @@
                             <div class="metodo-desc">Pagamento no local (Caixa)</div>
                         </div>
                     </div>
-
-                    <!-- Resumo da Recarga -->
                     <div id="resumoRecarga" class="resumo-recarga" style="display: none;">
                         <h6 class="mb-3"><i class="fas fa-receipt me-2"></i> Resumo da Recarga</h6>
                         <div class="resumo-item">
@@ -111,15 +103,11 @@
                             <span class="resumo-valor" id="resumoNovoSaldo">R$ 198,50</span>
                         </div>
                     </div>
-
-                    <!-- Botões de Ação -->
                     <div class="d-grid gap-2 mt-4">
                         <button type="button" class="btn btn-confirmar btn-lg" id="btnConfirmarRecarga" disabled onclick="confirmarRecarga()">
                             <i class="fas fa-check-circle me-2"></i> Confirmar Recarga
                         </button>
                     </div>
-
-                    <!-- Mensagem de Sucesso -->
                     <div class="success-message" id="mensagemSucesso">
                         <div class="success-icon">
                             <i class="fas fa-check-circle" style="color: #28a745;"></i>
@@ -128,8 +116,6 @@
                         <p class="mb-0">Seu saldo foi atualizado. Você pode agora utilizar o estacionamento normalmente.</p>
                     </div>
                 </div>
-
-                <!-- Informações Adicionais -->
                 <div class="card shadow-sm mt-4 bg-info bg-opacity-10">
                     <div class="card-body">
                         <h6 class="card-title"><i class="fas fa-info-circle me-2"></i> Informações sobre Recargas</h6>
@@ -144,7 +130,7 @@
                 </div>
 
                 <div class="btn-voltar text-center">
-                    <a href="portal-usuario.html" class="btn btn-outline-secondary">
+                    <a href="portal_estudante.php" class="btn btn-outline-secondary">
                         <i class="fas fa-arrow-left me-2"></i> Voltar ao Portal
                     </a>
                 </div>
@@ -166,16 +152,14 @@
         const saldoAtual = 198.50;
 
         function selecionarValor(elemento, valor) {
-            // Remover seleção anterior
+            
             document.querySelectorAll('.valor-option').forEach(el => {
                 el.classList.remove('selected');
             });
             
-            // Adicionar seleção ao elemento clicado
+            
             elemento.classList.add('selected');
             valorSelecionado = valor;
-            
-            // Limpar input customizado
             document.getElementById('valorCustomizado').value = '';
             
             atualizarResumo();
@@ -185,7 +169,6 @@
             const valor = parseFloat(elemento.value);
             
             if (valor > 0 && valor <= 5000) {
-                // Remover seleção dos valores pré-definidos
                 document.querySelectorAll('.valor-option').forEach(el => {
                     el.classList.remove('selected');
                 });
@@ -199,12 +182,10 @@
         }
 
         function selecionarMetodo(elemento, metodo) {
-            // Remover seleção anterior
             document.querySelectorAll('.metodo-option').forEach(el => {
                 el.classList.remove('selected');
             });
-            
-            // Adicionar seleção ao elemento clicado
+        
             elemento.classList.add('selected');
             metodoSelecionado = metodo;
             
@@ -213,7 +194,7 @@
 
         function atualizarResumo() {
             if (valorSelecionado > 0 && metodoSelecionado) {
-                // Atualizar resumo
+
                 const novoSaldo = (saldoAtual + valorSelecionado).toFixed(2);
                 
                 document.getElementById('resumoValor').textContent = `R$ ${valorSelecionado.toFixed(2)}`;
@@ -227,11 +208,11 @@
                 
                 document.getElementById('resumoNovoSaldo').textContent = `R$ ${novoSaldo}`;
                 
-                // Mostrar resumo e habilitar botão
+             
                 document.getElementById('resumoRecarga').style.display = 'block';
                 document.getElementById('btnConfirmarRecarga').disabled = false;
             } else {
-                // Ocultar resumo e desabilitar botão
+                
                 document.getElementById('resumoRecarga').style.display = 'none';
                 document.getElementById('btnConfirmarRecarga').disabled = true;
             }
@@ -240,33 +221,28 @@
         function confirmarRecarga() {
             const botao = document.getElementById('btnConfirmarRecarga');
             
-            // Desabilitar botão e mostrar loading
             botao.disabled = true;
             botao.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Processando...';
             
-            // Simular processamento de acordo com o método
+          
             let tempoProcessamento = 2000;
             
             if (metodoSelecionado === 'pix') {
-                tempoProcessamento = 1500; // PIX é mais rápido
+                tempoProcessamento = 1500; 
             } else if (metodoSelecionado === 'dinheiro') {
-                tempoProcessamento = 1000; // Dinheiro é imediato
+                tempoProcessamento = 1000; 
             }
             
             setTimeout(() => {
-                // Mostrar mensagem de sucesso
                 document.getElementById('mensagemSucesso').classList.add('show');
                 
-                // Esconder resumo e botão
                 document.getElementById('resumoRecarga').style.display = 'none';
                 botao.style.display = 'none';
                 
-                // Scroll para mensagem
+        
                 document.getElementById('mensagemSucesso').scrollIntoView({ behavior: 'smooth' });
             }, tempoProcessamento);
         }
-
-        // Inicialmente, o botão começa desabilitado
         document.getElementById('btnConfirmarRecarga').disabled = true;
     </script>
 </body>

@@ -29,8 +29,7 @@
     <div class="container mt-5 mb-5">
         <div class="row justify-content-center">
             <div class="col-lg-8">
-                
-                <!-- Seção de Entrada de Ticket -->
+            
                 <div class="card shadow-sm mb-4">
                     <div class="card-header bg-warning text-dark">
                         <h5 class="mb-0"><i class="fas fa-ticket-alt me-2"></i> Consultar Ticket de Estacionamento</h5>
@@ -57,8 +56,6 @@
                         </form>
                     </div>
                 </div>
-
-                <!-- Seção de Informações do Ticket (Oculta por padrão) -->
                 <div id="ticketInfo" style="display: none;">
                     <div class="ticket-container">
                         <div class="text-center mb-3">
@@ -69,8 +66,6 @@
                         <div class="status-badge">
                             <i class="fas fa-car me-2"></i> VEÍCULO ESTACIONADO
                         </div>
-
-                        <!-- Informações Básicas -->
                         <div class="info-grid">
                             <div class="info-item">
                                 <label>Código do Ticket:</label>
@@ -89,21 +84,16 @@
                                 <div class="value" id="displayTempoEstacionado">2h 45min</div>
                             </div>
                         </div>
-
-                        <!-- Valor a Pagar -->
                         <div class="valor-pagar">
                             <h3>Valor a Pagar</h3>
                             <div class="valor-total" id="displayValorTotal">R$ 13,75</div>
                             <small style="opacity: 0.9;">Taxa: R$ 5,00/hora (Visitante)</small>
                         </div>
 
-                        <!-- Detalhes de Cálculo -->
                         <div class="ticket-info">
                             <strong>Cálculo do Valor:</strong><br>
                             <small id="displayDetalheCálculo">2h 45min × R$ 5,00/h = R$ 13,75</small>
                         </div>
-
-                        <!-- Botões de Ação -->
                         <div class="d-grid gap-2 mt-4">
                             <button type="button" class="btn btn-pagar btn-lg" id="btnRealizarPagamento">
                                 <i class="fas fa-credit-card me-2"></i> Realizar Pagamento
@@ -114,7 +104,7 @@
                         </div>
                     </div>
 
-                    <!-- Mensagem de Sucesso -->
+                    
                     <div class="success-message" id="mensagemSucesso">
                         <div class="d-flex align-items-center">
                             <i class="fas fa-check-circle me-3" style="font-size: 1.5rem;"></i>
@@ -126,7 +116,7 @@
                     </div>
                 </div>
 
-                <!-- Mensagem de Erro -->
+             
                 <div class="error-message" id="mensagemErro">
                     <div class="d-flex align-items-center">
                         <i class="fas fa-exclamation-circle me-3" style="font-size: 1.5rem;"></i>
@@ -136,8 +126,6 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Informações Adicionais -->
                 <div class="card shadow-sm mt-4 bg-info bg-opacity-10">
                     <div class="card-body">
                         <h6 class="card-title"><i class="fas fa-info-circle me-2"></i> Informações Importantes</h6>

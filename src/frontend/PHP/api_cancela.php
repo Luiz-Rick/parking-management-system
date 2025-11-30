@@ -1,11 +1,7 @@
 <?php
-// api_cancela.php
-// API para registrar abertura manual de cancela (RF-007)
-
 require_once __DIR__ . '/conexao_unificada.php';
 header('Content-Type: application/json; charset=utf-8');
 
-// Apenas POST
 $input = json_decode(file_get_contents('php://input'), true);
 if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !is_array($input)) {
     http_response_code(400);
@@ -17,7 +13,6 @@ $acao = $input['acao'] ?? null;
 $motivo = trim($input['motivo'] ?? '');
 $cancela = strtoupper(trim($input['cancela'] ?? ''));
 
-// Autenticação e autorização
 if (!usuario_autenticado() || (!usuario_tipo('OPERADOR') && !usuario_tipo('FUNCIONARIO'))) {
     http_response_code(403);
     echo json_encode(['sucesso' => false, 'erro' => 'Acesso negado']);
@@ -36,7 +31,6 @@ if ($acao === 'abrir_manual') {
         $cancela = 'DESCONHECIDO';
     }
 
-    // Criar tabela logs_operacao se não existir (leve schema)
     $create_sql = "CREATE TABLE IF NOT EXISTS logs_operacao (
         id INT AUTO_INCREMENT PRIMARY KEY,
         operador_id INT NOT NULL,

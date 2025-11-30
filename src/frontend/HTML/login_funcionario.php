@@ -1,21 +1,8 @@
 <?php
-/**
- * =====================================================
- * LOGIN FUNCIONÁRIO
- * =====================================================
- * 
- * Arquivo: login_funcionario.php
- * Descrição: Autenticação para funcionários
- * 
- * Data: 30/11/2025
- */
-
-// Usar conexão unificada
 require_once '../PHP/conexao_unificada.php';
 
 $erro = '';
 
-// Processar formulário de login
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     if (!isset($_POST['email']) || empty($_POST['email'])) {
@@ -27,10 +14,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $email = trim($_POST['email']);
         $senha = $_POST['senha'];
 
-        // =====================================================
-        // USAR PREPARED STATEMENT PARA SEGURANÇA
-        // =====================================================
-        
         $query = "SELECT id, nome, email, senha, tipo, saldo FROM usuarios 
                   WHERE email = ? AND (tipo = 'FUNCIONARIO' OR tipo = 'OPERADOR')";
         $stmt = $mysqli->prepare($query);
@@ -46,10 +29,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($resultado && $resultado->num_rows === 1) {
                 $usuario = $resultado->fetch_assoc();
 
-                // COMPARAÇÃO DE SENHA (compatível com dados existentes em texto puro)
                 if ($senha == $usuario['senha']) {
-                    
-                    // Login bem-sucedido
+                
                     if (session_status() === PHP_SESSION_NONE) {
                         session_start();
                     }
@@ -60,13 +41,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $_SESSION['tipo'] = $usuario['tipo'];
                     $_SESSION['saldo'] = $usuario['saldo'];
 
-                    // Registrar log de acesso
+               
                     registrar_log_sistema($usuario['id'], 'LOGIN', json_encode([
                         'tipo' => $usuario['tipo'],
                         'email' => $usuario['email']
                     ]));
 
-                    // Redirecionar para dashboard
+      
                     header("Location: dashboard_func.php");
                     exit();
                 } else {
@@ -205,7 +186,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
 
-    <!-- Navbar -->
+
     <nav class="navbar navbar-light" style="background-color: #ffbf00;">
         <div class="container-fluid">
             <a class="navbar-brand" href="index.html">
@@ -225,10 +206,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </nav>
 
-    <!-- Login Container -->
     <div class="login-container">
         <div class="login-card">
-            <!-- Header -->
             <div class="login-header">
                 <img src="https://images.seeklogo.com/logo-png/47/2/uninassau-logo-png_seeklogo-475645.png" alt="Logo">
                 <h2>UNINASSAU S.A</h2>
@@ -237,18 +216,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <i class="fas fa-user-tie"></i> Acesso Restrito
                 </span>
             </div>
-
-            <!-- Mensagem de Erro -->
             <?php if ($erro): ?>
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     <i class="fas fa-exclamation-circle"></i> <?php echo $erro; ?>
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
             <?php endif; ?>
-
-            <!-- Form -->
             <form action="" method="POST">
-                <!-- Email/Usuário -->
                 <div class="form-group">
                     <label for="email" class="form-label">
                         <i class="fas fa-envelope"></i> E-mail
@@ -262,8 +236,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         required
                     >
                 </div>
-
-                <!-- Senha -->
                 <div class="form-group">
                     <label for="senha" class="form-label">
                         <i class="fas fa-lock"></i> Senha
@@ -277,14 +249,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         required
                     >
                 </div>
-
-                <!-- Botão Login -->
                 <button type="submit" class="btn btn-login">
                     <i class="fas fa-sign-in-alt"></i> Acessar Painel
                 </button>
             </form>
-
-            <!-- Footer Link -->
             <div class="text-center mt-4 pt-3 border-top">
                 <a href="index.html" class="text-decoration-none" style="color: #667eea; font-weight: 600;">
                     <i class="fas fa-home"></i> Voltar para Início
@@ -292,8 +260,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </div>
     </div>
-
-    <!-- Footer -->
     <footer>
         <p class="mb-0">© 2025 Estacionamento UNINASSAU S.A - Sistema de Funcionários</p>
     </footer>

@@ -1,9 +1,104 @@
-/* ===============================================
-   RECARGA.CSS - Estilos para Tela de Recarga de Saldo
-   ===============================================
-   Arquivo: recarga.html
-   Responsável: RF-009 - Recarga de Créditos Pré-pagos
-   =============================================== */
+/* RECARGA.CSS - Padronizado com a identidade do site (amarelo/laranja) */
+
+:root{
+    --brand-yellow: #ffc107;
+    --brand-orange: #ff9800;
+    --brand-dark: #333333;
+    --accent: #667eea;
+}
+.recarga-container{
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 30px;
+    color: var(--brand-dark);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
+.recarga-container .text-center h2{
+    color: var(--brand-dark);
+}
+.valor-option{
+    background-color: #fff8e1;
+    border: 2px solid transparent;
+    padding: 18px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    margin-bottom: 12px;
+}
+.valor-option:hover{
+    transform: translateX(4px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+.valor-option.selected{
+    border-color: var(--brand-orange);
+    background-color: rgba(255,193,7,0.12);
+}
+.valor-amount{
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--brand-orange);
+}
+.valor-label{
+    color: rgba(0,0,0,0.65);
+}
+.metodo-option{
+    background-color: #fff;
+    border: 1px solid #f0f0f0;
+    padding: 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    margin-bottom: 12px;
+    text-align: left;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+.metodo-option:hover{
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+}
+.metodo-option.selected{
+    border-color: var(--brand-yellow);
+    background-color: rgba(255,193,7,0.06);
+}
+.metodo-icon{font-size: 1.6rem; color: var(--brand-dark);}
+.metodo-name{font-weight: 700; color: var(--brand-dark);}
+.metodo-desc{font-size: .9rem; color: rgba(0,0,0,0.6);}
+.resumo-recarga{
+    background-color: #fff;
+    padding: 16px;
+    border-radius: 8px;
+    margin: 16px 0;
+    border: 1px solid #f4f4f4;
+}
+.resumo-item{display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #f0f0f0}
+.resumo-item:last-child{border-bottom:none}
+.resumo-label{color:rgba(0,0,0,0.6)}
+.resumo-valor{color:var(--brand-orange); font-weight:700}
+.btn-confirmar{
+    background: linear-gradient(180deg,var(--brand-yellow),var(--brand-orange));
+    color: var(--brand-dark);
+    font-weight: 700;
+    padding: 14px 24px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 8px;
+}
+.btn-confirmar:hover:not(:disabled){transform:translateY(-3px); box-shadow:0 10px 30px rgba(0,0,0,0.08)}
+.btn-confirmar:disabled{opacity:.6; cursor:not-allowed}
+.success-message{display:none; background-color:#d4edda; border:1px solid #c3e6cb; color:#155724; padding:18px; border-radius:8px; margin:18px 0}
+.success-message.show{display:block; animation:slideIn .4s ease}
+.success-icon{font-size:2.4rem; margin-bottom:8px}
+@keyframes slideIn{from{opacity:0; transform:translateY(-12px)} to{opacity:1; transform:translateY(0)}}
+.info-custom{background-color:#fff8e1; border-left:4px solid var(--brand-yellow); padding:12px; border-radius:6px; margin:12px 0}
+.info-custom strong{color:var(--brand-dark)}
+.btn-voltar{margin-top:18px}
+/* Ajustes responsivos */
+@media (max-width:576px){
+    .recarga-container{padding:18px}
+    .valor-amount{font-size:1.2rem}
+}
 
 .recarga-container {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);

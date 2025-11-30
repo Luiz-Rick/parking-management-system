@@ -1,5 +1,4 @@
 <?php
-// Inclui a conexão com o novo banco estacionamento_db
 require_once '../PHP/conexao_unificada.php';
 
 $erro = null;
@@ -8,7 +7,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
     $erro = null;
     
-    // Validações básicas
     if (!isset($_POST['email']) || empty($_POST['email']))  {
         $erro = "Email não informado!";
     } else if (!isset($_POST['senha']) || empty($_POST['senha']))  {
@@ -16,12 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } else {
         
         $email = trim($_POST['email']);
-        $senha = $_POST['senha']; // Senha digitada
-
-        // =====================================================
-        // USAR PREPARED STATEMENT PARA SEGURANÇA
-        // =====================================================
-        
+        $senha = $_POST['senha'];
         $query = "SELECT id, nome, email, senha, tipo, saldo FROM usuarios WHERE email = ?";
         $stmt = $mysqli->prepare($query);
         
@@ -29,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $erro = "Erro ao preparar a consulta: " . $mysqli->error;
         } else {
             
-            // Bind do parâmetro (s = string)
+        
             $stmt->bind_param('s', $email);
             $stmt->execute();
             $resultado = $stmt->get_result();
@@ -37,12 +30,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if ($resultado->num_rows == 1) {
                 $usuario = $resultado->fetch_assoc();
 
-                // COMPARAÇÃO SEGURA DA SENHA
-                // Nota: senhas armazenadas como texto puro (compatível com dados existentes)
-                // Em produção, use: password_hash() e password_verify()
                 if ($senha == $usuario['senha']) {
                     
-                    // Login Sucesso: Inicia sessão
+            
                     if (session_status() === PHP_SESSION_NONE) {
                         session_start();
                     }
@@ -52,21 +42,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $_SESSION['email'] = $usuario['email'];
                     $_SESSION['tipo'] = $usuario['tipo'];
                     $_SESSION['saldo'] = $usuario['saldo'];
-
-                    // =====================================================
-                    // REDIRECIONAMENTO INTELIGENTE (PARA ARQUIVOS .php)
-                    // =====================================================
-                    
                     if ($usuario['tipo'] == 'ALUNO') {
-                        // Redireciona para o portal dinâmico do aluno
+             
                         header("Location: portal_estudante.php");
                         exit();
                     } else if ($usuario['tipo'] == 'OPERADOR' || $usuario['tipo'] == 'FUNCIONARIO') {
-                        // Redireciona para o dashboard do operador
+                     
                         header("Location: dashboard_func.php");
                         exit();
                     } else {
-                        // Tipo não reconhecido - redireciona para home
+                      
                         header("Location: index.html");
                         exit();
                     }

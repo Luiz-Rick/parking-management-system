@@ -1,51 +1,35 @@
 <?php
-/**
- * =====================================================
- * DASHBOARD DO FUNCIONÁRIO/OPERADOR
- * =====================================================
- * 
- * Arquivo: dashboard_func.php
- * Descrição: Painel de controle para funcionários e operadores
- * Acesso: FUNCIONARIO, OPERADOR
- * 
- * Data: 30/11/2025
- */
-
 require_once '../PHP/conexao_unificada.php';
 
-// Verificar autenticação
+
 requer_autenticacao('login.php');
 
-// Verificar se é operador ou funcionário
+
 if (!usuario_tipo('OPERADOR') && !usuario_tipo('FUNCIONARIO')) {
     header("Location: index.html");
     exit();
 }
 
-// =====================================================
-// BUSCAR DADOS DO DASHBOARD
-// =====================================================
 
-// Total de vagas ocupadas hoje
 $query_ocupacao = "SELECT COUNT(*) as total_abertos FROM estadias WHERE DATE(hora_entrada) = CURDATE() AND status = 'ABERTO'";
 $result_ocupacao = $mysqli->query($query_ocupacao);
 $dados_ocupacao = $result_ocupacao->fetch_assoc();
 $total_abertos = $dados_ocupacao['total_abertos'] ?? 0;
 
-// Receita do dia
+
 $query_receita = "SELECT COALESCE(SUM(valor_cobrado), 0) as receita_hoje FROM estadias WHERE DATE(hora_saida) = CURDATE() AND status = 'FINALIZADO'";
 $result_receita = $mysqli->query($query_receita);
 $dados_receita = $result_receita->fetch_assoc();
 $receita_hoje = $dados_receita['receita_hoje'] ?? 0;
 
-// Eventos recentes (últimas 10 estadias encerradas)
+
 $query_eventos = "SELECT e.id, e.placa, e.hora_entrada, e.hora_saida, e.valor_cobrado, e.status
                    FROM estadias e
                    ORDER BY e.hora_entrada DESC
                    LIMIT 10";
 $result_eventos = $mysqli->query($query_eventos);
 
-// Total de tickets visitantes
+
 $query_visitantes = "SELECT COUNT(*) as total_visitantes FROM estadias 
                      WHERE DATE(hora_entrada) = CURDATE() AND veiculo_id IS NULL";
 $result_visitantes = $mysqli->query($query_visitantes);
@@ -136,7 +120,7 @@ $total_visitantes = $dados_visitantes['total_visitantes'] ?? 0;
 </head>
 <body>
 
-    <!-- NAVBAR -->
+ 
     <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">
@@ -164,7 +148,7 @@ $total_visitantes = $dados_visitantes['total_visitantes'] ?? 0;
     <div class="container-fluid mt-4">
         <div class="row gap-4">
             
-            <!-- SIDEBAR -->
+            
             <div class="col-12 col-md-2 d-none d-md-block">
                 <div class="sidebar p-3">
                     <ul class="nav flex-column">
@@ -192,13 +176,13 @@ $total_visitantes = $dados_visitantes['total_visitantes'] ?? 0;
                 </div>
             </div>
 
-            <!-- CONTEÚDO PRINCIPAL -->
+          
             <div class="col-12 col-md-10">
                 <h2 class="mb-4">
                     <i class="fas fa-chart-line me-2"></i> Painel Operacional
                 </h2>
 
-                <!-- CARDS DE STATUS -->
+               
                 <div class="row mb-4 gy-3">
                     <div class="col-12 col-sm-6 col-lg-3">
                         <div class="card text-white bg-success-custom">
@@ -249,7 +233,6 @@ $total_visitantes = $dados_visitantes['total_visitantes'] ?? 0;
                     </div>
                 </div>
 
-                <!-- TABELA DE EVENTOS RECENTES -->
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="mb-0">

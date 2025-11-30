@@ -1,61 +1,19 @@
 <?php
-/**
- * =====================================================
- * ADICIONAR VEÍCULO - SISTEMA DE ESTACIONAMENTO
- * =====================================================
- * 
- * Arquivo: adicionar_veiculo.php
- * Descrição: Recebe dados do formulário e insere novo veículo
- *            Redireciona para portal_estudante.php com mensagem
- * 
- * Parâmetros POST:
- *   - placa (obrigatório): Placa do veículo (ABC1234)
- *   - modelo (obrigatório): Modelo do veículo (Honda Civic)
- *   - cor (opcional): Cor do veículo
- * 
- * Data: 30/11/2025
- * Versão: 1.0
- */
-
 require_once '../PHP/conexao_unificada.php';
-
-// =====================================================
-// VERIFICAR AUTENTICAÇÃO
-// =====================================================
-
 requer_autenticacao('../login.html');
-
-// =====================================================
-// OBTER DADOS DA SESSÃO
-// =====================================================
-
 $usuario_id = $_SESSION['id'];
 
-// =====================================================
-// PROCESSAR FORMULÁRIO
-// =====================================================
-
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    // Se não for POST, redirecionar para portal
     header("Location: portal_estudante.php");
     exit();
 }
-
-// =====================================================
-// VALIDAR E SANITIZAR ENTRADAS
-// =====================================================
 
 $placa = sanitizar_entrada($_POST['placa'] ?? '');
 $modelo = sanitizar_entrada($_POST['modelo'] ?? '');
 $cor = sanitizar_entrada($_POST['cor'] ?? '');
 
-// =====================================================
-// VALIDAÇÃO DE DADOS
-// =====================================================
-
 $erros = [];
 
-// Validar placa
 if (empty($placa)) {
     $erros[] = "Placa é obrigatória.";
 } elseif (strlen($placa) < 7) {
@@ -64,7 +22,6 @@ if (empty($placa)) {
     $erros[] = "Placa não pode ter mais de 10 caracteres.";
 }
 
-// Validar modelo
 if (empty($modelo)) {
     $erros[] = "Modelo é obrigatório.";
 } elseif (strlen($modelo) < 3) {
@@ -73,24 +30,15 @@ if (empty($modelo)) {
     $erros[] = "Modelo não pode ter mais de 100 caracteres.";
 }
 
-// Validar cor (se informada)
 if (!empty($cor) && strlen($cor) > 50) {
     $erros[] = "Cor não pode ter mais de 50 caracteres.";
 }
-
-// =====================================================
-// SE HOUVER ERROS, REDIRECIONAR COM MENSAGEM
-// =====================================================
 
 if (!empty($erros)) {
     $_SESSION['erro_veiculo'] = implode("<br>", $erros);
     header("Location: portal_estudante.php");
     exit();
 }
-
-// =====================================================
-// VERIFICAR SE PLACA JÁ EXISTE PARA ESTE USUÁRIO
-// =====================================================
 
 $query_check = "SELECT id FROM veiculos WHERE usuario_id = ? AND placa = ?";
 $stmt_check = $mysqli->prepare($query_check);
@@ -111,10 +59,6 @@ if ($result_check->num_rows > 0) {
     exit();
 }
 
-// =====================================================
-// VERIFICAR SE PLACA JÁ EXISTE NO SISTEMA (para outro usuário)
-// =====================================================
-
 $query_placa_global = "SELECT id FROM veiculos WHERE placa = ?";
 $stmt_placa_global = $mysqli->prepare($query_placa_global);
 
@@ -133,10 +77,6 @@ if ($result_placa_global->num_rows > 0) {
     header("Location: portal_estudante.php");
     exit();
 }
-
-// =====================================================
-// INSERIR NOVO VEÍCULO
-// =====================================================
 
 $status_padrao = 'ATIVO';
 
@@ -162,10 +102,6 @@ if (!$stmt_insert->execute()) {
 
 $veiculo_id = $mysqli->insert_id;
 
-// =====================================================
-// REGISTRAR LOG
-// =====================================================
-
 registrar_log_sistema(
     $usuario_id,
     'ADICIONAR_VEICULO',
@@ -177,17 +113,10 @@ registrar_log_sistema(
     ])
 );
 
-// =====================================================
-// DEFINIR MENSAGEM DE SUCESSO NA SESSÃO
-// =====================================================
-
 $_SESSION['sucesso_veiculo'] = "✅ Veículo <strong>$placa</strong> adicionado com sucesso!";
-
-// =====================================================
-// REDIRECIONAR PARA PORTAL
-// =====================================================
 
 header("Location: portal_estudante.php");
 exit();
 
 ?>
+

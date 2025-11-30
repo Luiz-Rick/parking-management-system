@@ -24,7 +24,7 @@
 
     <div class="container-fluid mt-4">
         <div class="row">
-            <!-- Sidebar (simulated) -->
+         
             <div class="col-md-2 d-none d-md-block bg-white sidebar shadow-sm rounded p-3">
                 <ul class="nav flex-column">
                     <li class="nav-item mb-2">
@@ -44,12 +44,9 @@
                     </li>
                 </ul>
             </div>
-
-            <!-- Main Content -->
             <div class="col-md-10">
                 <h2 class="mb-4">Painel Operacional (RF-017)</h2>
 
-                <!-- Status Cards -->
                 <div class="row mb-4">
                     <div class="col-md-3">
                         <div class="card text-white bg-success mb-3">
@@ -88,8 +85,6 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Recent Events Table -->
                 <div class="card shadow-sm mb-4">
                     <div class="card-header bg-white d-flex justify-content-between align-items-center">
                         <h5 class="mb-0">Eventos Recentes</h5>
@@ -141,8 +136,6 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Manual Control Actions -->
                 <div class="row">
                     <div class="col-md-6">
                         <div class="card shadow-sm">
@@ -181,7 +174,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        // Simulação de dados em tempo real (RF-017)
         const estadoInicial = {
             ocupacao: 170,
             totalVagas: 200,
@@ -190,26 +182,22 @@
         };
 
         let estado = { ...estadoInicial };
-
-        // Função para gerar valores aleatórios realistas
         function gerarAleatoria(base, variacao = 0.15) {
             const desvio = base * variacao;
             const novoValor = base + (Math.random() - 0.5) * 2 * desvio;
             return Math.max(0, novoValor);
         }
-
-        // Função para atualizar os contadores
         function atualizarDashboard() {
-            // Gerar novo estado aleatório
+         
             estado.ocupacao = Math.floor(gerarAleatoria(estadoInicial.ocupacao, 0.2));
-            estado.ocupacao = Math.min(estado.ocupacao, estado.totalVagas); // Não pode exceder total
+            estado.ocupacao = Math.min(estado.ocupacao, estado.totalVagas);
             
             const percentualOcupacao = ((estado.ocupacao / estado.totalVagas) * 100).toFixed(0);
             
             estado.receita = parseFloat(gerarAleatoria(estadoInicial.receita, 0.25).toFixed(2));
             estado.ticketsVendidos = Math.floor(gerarAleatoria(estadoInicial.ticketsVendidos, 0.30));
 
-            // Atualizar card de ocupação
+
             const ocupacaoCard = document.querySelector('.card.bg-warning');
             if (ocupacaoCard) {
                 ocupacaoCard.innerHTML = `
@@ -220,8 +208,6 @@
                     </div>
                 `;
             }
-
-            // Atualizar card de receita
             const receitaCard = document.querySelector('.card.bg-info');
             if (receitaCard) {
                 receitaCard.innerHTML = `
@@ -233,11 +219,7 @@
                 `;
             }
         }
-
-        // Atualizar dashboard a cada 5 segundos
         setInterval(atualizarDashboard, 5000);
-
-        // Atualizar imediatamente na carga
         window.addEventListener('load', function() {
             atualizarDashboard();
         });
