@@ -1,58 +1,49 @@
-# Sistema de Controle de Cancelas de Estacionamento (SRS) - Estacionamento UNINASSAU S.A
+# 🚗 Sistema de Controle de Acesso e Estacionamento
 
-**Versão:** 1.0  
-**Data:** 04/11/2025  
-**Nome do Estacionamento:** ESTACIONAMENTO UNINASSAU S.A
+![PHP](https://img.shields.io/badge/php-%23777BB4.svg?style=for-the-badge&logo=php&logoColor=white)
+![MySQL](https://img.shields.io/badge/mysql-%2300f.svg?style=for-the-badge&logo=mysql&logoColor=white)
+![JavaScript](https://img.shields.io/badge/javascript-%23F7DF1E.svg?style=for-the-badge&logo=javascript&logoColor=black)
+![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white)
 
-## 1. Visão Geral
-**Objetivo:** Definir os requisitos para um sistema que gerencia cancelas de entrada e saída em um estacionamento, com suporte a usuários (funcionários, alunos e visitantes), saldos pré-pagos, descontos e cálculo automático do valor com base no tempo de permanência.
+Aplicação web Full-Stack desenvolvida para o gerenciamento inteligente de acesso de veículos e pedestres. O sistema integra o controle de catracas, emissão de tickets para visitantes e um portal financeiro para os estudantes.
 
-**Motivação:** Melhorar o fluxo operacional (reduzindo filas), garantir precisão na cobrança e prover transparência aos usuários quanto a saldo e histórico.
+## 📌 Funcionalidades Principais
+Este sistema é dividido em módulos para atender diferentes perfis de usuários:
 
-**Escopo (alto nível):**
-*   Controle de cancelas (entrada/saída) com operação automática e manual.
-*   Identificação de veículos (placa, cartão RFID, QR, ticket).
-*   Cadastro e gestão de contas pré-pagas (funcionários e alunos).
-*   Emissão de tickets para visitantes (pós-pago ou pré-pago avulso).
-*   Cálculo de cobrança por tempo de permanência (com regras de desconto).
-*   Consulta de saldo, extrato, e recargas.
-*   Relatórios operacionais e financeiros.
-*   Auditoria e trilhas de log.
+* **Portal do Estudante:** Área restrita para consulta de dados, extratos e sistema de **recarga de saldo** online.
+* **Módulo de Visitantes:** Interface para cadastro rápido, geração de tickets e simulação de entrada em catracas/cancelas via API (`api_cancela.php`).
+* **Dashboard Administrativo/Operador:** Painel de controle para monitoramento de entrada e saída, gerenciamento de tarifas e veículos, e exportação de relatórios/extratos.
+* **Autenticação Segura:** Sistemas de login distintos para alunos, funcionários e administradores.
 
-**Fora de escopo (inicial):**
-*   Reconhecimento de placas por câmera (LPR) de terceiros — previsto como integração futura.
-*   Integração direta com ERPs.
-*   Aplicativos mobile nativos (usar PWA na fase 1).
+## 🛠️ Tecnologias e Arquitetura
+* **Back-end:** PHP (Lógica de negócios, APIs de catraca e autenticação).
+* **Banco de Dados:** Banco de dados relacional (Scripts SQL incluídos) acessado via conexão unificada (PDO/MySQL).
+* **Front-end:** HTML5, CSS3, e JavaScript Vanilla para interatividade dinâmica e consumo das APIs internas (ex: `visitante_api.js`).
 
-## 2. Stakeholders & Perfis de Usuário
-*   **Administrador do Sistema (TI/Operações):** gerencia parâmetros, tarifas, regras, usuários e integrações.
-*   **Operador/Portaria:** acompanha eventos em tempo real, libera manualmente cancelas, emite tickets visitantes, resolve exceções.
-*   **Financeiro:** acompanha saldos, conciliações, relatórios de receita, descontos aplicados.
-*   **Funcionário (usuário final):** possui cadastro, veículo(s) e saldo pré-pago; entra/saí automaticamente ou por liberação manual em contingência.
-*   **Aluno (usuário final):** perfil idêntico ao Funcionário para efeitos de saldo, com regras de desconto específicas.
-*   **Visitante:** recebe ticket e paga por uso (no caixa/autoatendimento/online); pode ter validação por convênio.
+## 🚀 Como executar o projeto localmente
+Como o projeto utiliza PHP, é necessário um servidor local (como XAMPP, WAMP ou Laragon):
 
-## 3. Definições e Abreviações
-*   **Cancela:** barreira física de controle de acesso (entrada/saída).
-*   **Estadia:** período entre a passagem na cancela de entrada e a saída.
-*   **Conta Pré-paga:** carteira digital com créditos para uso do estacionamento.
-*   **Ticket:** comprovante com identificador único para visitantes.
-*   **PWA:** Progressive Web App.
+1. Instale e inicie o servidor Apache e MySQL (ex: painel do XAMPP).
+2. Clone este repositório para a pasta pública do seu servidor (no XAMPP, a pasta `htdocs`).
+3. **Configuração do Banco de Dados:**
+   - Acesse o *phpMyAdmin* (`http://localhost/phpmyadmin`).
+   - Crie um banco de dados para o projeto.
+   - Importe os arquivos SQL presentes na pasta `src/database/` (como o `verificar_dados_visitante.sql`).
+   - Ajuste as credenciais de acesso no arquivo `src/frontend/PHP/conexao_unificada.php`.
+4. Acesse o sistema pelo navegador: `http://localhost/nome-da-pasta/src/frontend/HTML/index.html`.
 
-## 4. Requisitos Funcionais (RF)
-*(Ver documento completo para detalhes)*
+## 📂 Estrutura de Diretórios em Destaque
+- `src/database/`: Scripts de banco de dados e verificações.
+- `src/frontend/HTML/`: Telas da aplicação (Dashboards, Login, Portais).
+- `src/frontend/PHP/`: Lógica de servidor, conexões e APIs internas (ex: `processar_recarga.php`, `exportar_extrato.php`).
+- `src/frontend/js/` e `src/frontend/css/`: Lógica de interface, validações e estilização.
 
-## 5. Regras de Negócio (RN)
-*(Ver documento completo para detalhes)*
+---
 
-## 6. Casos de Uso (UC)
-*(Ver documento completo para detalhes)*
+## 👤 Autor
+**Luiz Henrique da Silva Pereira**
+*Estudante de ADS - Uninassau | Desenvolvedor Full-Stack*
 
-## 7. Fluxos Principais
-*(Ver documento completo para detalhes)*
-
-## 8. Requisitos Não Funcionais (RNF)
-*(Ver documento completo para detalhes)*
-
-## 9. Modelo de Dados
-*(Ver documento completo para detalhes)*
+[![LinkedIn](https://img.shields.io/badge/linkedin-%230077B5.svg?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/luiz-henrique-da-silva-pereira-574620398)
+[![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.com/luiz-rick)
